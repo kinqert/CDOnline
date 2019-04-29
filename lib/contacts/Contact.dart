@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cdonline/operations/Debt.dart';
+import 'package:cdonline/operations/DebtDelegate.dart';
 
-class Contact {
+class Contact implements DebtDelegate {
   String name;
   String lastName;
   String adress;
@@ -16,5 +17,24 @@ class Contact {
     name = "Nome";
     lastName = "Cognome";
     note = "Testo di prova per la descrizione";
+  }
+
+  bool debtExist() {
+    return debt != null;
+  }
+
+  setDebt(Debt debt) {
+    this.debt = debt;
+    this.debt.delegate = this;
+  }
+
+  Debt getDebt() {
+    return debt;
+  }
+
+  @override
+  void debtExtinguished() {
+    historyDebt.add(debt);
+    debt = null;
   }
 }

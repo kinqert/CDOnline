@@ -5,7 +5,7 @@ class Transaction implements Operation {
   final double amount;
   final OperationDirection direction;
 
-  const Transaction(this.dateTime, this.amount, this.direction);
+  const Transaction(this.amount, this.dateTime, this.direction);
 
   @override
   double getAmount() {
