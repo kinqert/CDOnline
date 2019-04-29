@@ -1,7 +1,7 @@
 import 'Transaction.dart';
 import 'Operation.dart';
 import 'DebtDelegate.dart';
-import 'package:cdonline/exceptions/DebtExceededException.dart';
+import 'package:cdonline/operations/exceptions/DebtExceededException.dart';
 
 class Debt implements Operation {
   final double amount;
@@ -22,7 +22,7 @@ class Debt implements Operation {
   // TODO: puo essere ottimizzata
   void addTransaction(Transaction transaction) {
     if (isDebtPayed()) {
-      throw new DebtExceededException("Debt aready payed");
+      throw DebtExceededException("Debt aready payed");
     }
     transactions.add(transaction);
     notifyIfClosed();
