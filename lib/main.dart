@@ -1,4 +1,5 @@
 import 'package:cdonline/contacts/ContactData.dart';
+import 'package:cdonline/pages/BottomTabController.dart';
 import 'package:flutter/material.dart';
 
 import 'contacts/pages/ContactListPage.dart';
@@ -13,7 +14,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: _buildDarkTheme(),
-      home: ContactListPage(_createMokupContacts(15)),
+      home: BottomTabController(),
     );
   }
 
@@ -38,19 +39,5 @@ class App extends StatelessWidget {
         body1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
       ),
     );
-  }
-
-  List<Contact> _createMokupContacts(int numberOfContact) {
-    List<Contact> contacts = new List<Contact>();
-
-    for (int i = 0; i < numberOfContact; i++) {
-      ContactData data = ContactData.getDefalut();
-      Contact newContact = Contact(data);
-      Credit newCredit = new Credit(15.5, DateTime.now(), OperationDirection.FromContactToUser);
-      newContact.setCredit(newCredit);
-      contacts.add(newContact);
-    }
-
-    return contacts;
   }
 }
