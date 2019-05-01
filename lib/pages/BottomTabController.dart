@@ -21,6 +21,7 @@ class _BottomTabControllerState extends State<BottomTabController> {
     return Scaffold(
       body: _navItems[_index],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).primaryColor,
         currentIndex: _index,
         onTap: onTap,
         items: [

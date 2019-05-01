@@ -39,7 +39,7 @@ class ContactListPage extends StatelessWidget {
       ContactData data = ContactData.getDefalut();
       Contact newContact = Contact(data);
       Credit newCredit = new Credit(
-          15.5, DateTime.now(), OperationDirection.FromContactToUser);
+          15.5, DateTime.now(), OperationDirection.FromUserToContact);
       newContact.setCredit(newCredit);
       contacts.add(newContact);
     }

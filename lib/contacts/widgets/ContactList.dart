@@ -17,7 +17,8 @@ class ContactList extends StatelessWidget {
 
     for (var contact in contacts) {
       ContactTableCell cell = ContactTableCell(contact);
-      rows.add(GestureDetector(child: cell, onTap: () {
+      Container container = Container(child: cell, padding: EdgeInsets.only(top: 20, left: 10, bottom: 0, right: 10),);
+      rows.add(GestureDetector(child: container, onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => ContactTabController(contact)));
       },));
     }

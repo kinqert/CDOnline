@@ -1,0 +1,4 @@
+#Wed May 01 18:42:03 CEST 2019
+base.0=/Users/lorenzoadreani/Progetti/CDOnline/build/app/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex

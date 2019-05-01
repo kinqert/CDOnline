@@ -27,6 +27,7 @@ class App extends StatelessWidget {
       accentColor: Colors.lightBlue[800],
       hintColor: Colors.greenAccent[400],
       errorColor: Color(0xffff3131),
+      bottomAppBarColor: Colors.blueGrey[900],
 
       // Define the default Font Family
       fontFamily: 'Montserrat',
