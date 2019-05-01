@@ -1,31 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:cdonline/contacts/Contact.dart';
+import 'package:cdonline/operations/widgets/CreditText.dart';
 
 class ContactTableCell extends StatelessWidget {
   final Contact contact;
+
   const ContactTableCell(this.contact, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: Row(children: _buildRowElements()));
+    return Container(
+        padding: EdgeInsets.only(top: 10, left: 20, bottom: 10, right: 20),
+        child: Row(children: _buildRowElements(context)));
   }
 
-  List<Widget> _buildRowElements() {
+  List<Widget> _buildRowElements(BuildContext context) {
     List<Widget> rowElements = new List<Widget>();
 
-    rowElements.add(_buildContentRow());
+    rowElements.add(_buildImageRow());
+    rowElements.add(_buildContentRow(context));
 
     return rowElements;
   }
 
-  Widget _buildContentRow() {
+  Widget _buildImageRow() {
     return Container(
-      padding: EdgeInsets.all(20),
-      child: Column(children: <Widget>[
-        Text("${contact.name} ${contact.lastName}",
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        Text("Dell altro testo")
-      ]),
+      width: 50,
+      height: 50,
+      decoration: new BoxDecoration(
+          shape: BoxShape.circle,
+          image:
+              new DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage('images/defaultUser.png'))),
     );
+  }
+
+  Widget _buildContentRow(BuildContext context) {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("${contact.name} ${contact.lastName}",
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          CreditText(contact.credit),
+        ]);
   }
 }

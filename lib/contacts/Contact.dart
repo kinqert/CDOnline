@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:cdonline/operations/Debt.dart';
-import 'package:cdonline/operations/DebtDelegate.dart';
+import 'package:cdonline/operations/Credit.dart';
+import 'package:cdonline/operations/CreditDelegate.dart';
 
-class Contact implements DebtDelegate {
+class Contact implements CreditDelegate {
   String name;
   String lastName;
   String adress;
   String note;
   Image image;
-  Debt debt;
-  List<Debt> historyDebt = new List<Debt>();
+  Credit credit;
+  List<Credit> historyDebt = new List<Credit>();
 
   Contact({this.name, this.lastName, this.adress, this.note, this.image});
 
@@ -20,21 +20,26 @@ class Contact implements DebtDelegate {
   }
 
   bool debtExist() {
-    return debt != null;
+    return credit != null;
   }
 
-  setDebt(Debt debt) {
-    this.debt = debt;
-    this.debt.delegate = this;
+  setCredit(Credit credit) {
+    this.credit = credit;
+    this.credit.delegate = this;
   }
 
-  Debt getDebt() {
-    return debt;
+  Credit getCredit() {
+    return credit;
+  }
+
+  Image getImage() {
+    if (image == null)
+      return Image(image: AssetImage('images/defaultUser.png'),);
   }
 
   @override
-  void debtExtinguished() {
-    historyDebt.add(debt);
-    debt = null;
+  void creditExtinguished() {
+    historyDebt.add(credit);
+    credit = null;
   }
 }

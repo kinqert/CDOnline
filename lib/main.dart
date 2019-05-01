@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-import './pages/root.dart';
+import 'contacts/pages/ContactListPage.dart';
+import 'contacts/Contact.dart';
+import 'operations/Credit.dart';
+import 'operations/Operation.dart';
 
 void main() => runApp(App());
 
@@ -9,7 +12,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: _buildDarkTheme(),
-      home: RootPage(),
+      home: ContactListPage(_createMokupContacts(10)),
     );
   }
 
@@ -20,7 +23,8 @@ class App extends StatelessWidget {
       primaryColor: Colors.blueGrey[900],
       backgroundColor: Colors.blueGrey[700],
       accentColor: Colors.lightBlue[800],
-
+      hintColor: Colors.greenAccent[400],
+      errorColor: Color(0xffff3131),
 
       // Define the default Font Family
       fontFamily: 'Montserrat',
@@ -33,5 +37,18 @@ class App extends StatelessWidget {
         body1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
       ),
     );
+  }
+
+  List<Contact> _createMokupContacts(int numberOfContact) {
+    List<Contact> contacts = new List<Contact>();
+
+    for (int i = 0; i < numberOfContact; i++) {
+      Contact newContact = Contact.getDefault();
+      Credit newCredit = new Credit(15.5, DateTime.now(), OperationDirection.FromContactToUser);
+      newContact.setCredit(newCredit);
+      contacts.add(newContact);
+    }
+
+    return contacts;
   }
 }

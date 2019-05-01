@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import 'package:cdonline/operations/Operation.dart';
 import 'package:cdonline/operations/exceptions/DebtExceededException.dart';
 import 'package:cdonline/operations/Transaction.dart';
-import 'package:cdonline/operations/Debt.dart';
+import 'package:cdonline/operations/Credit.dart';
 
 void main() {
   double amount = 15.5;
@@ -11,7 +11,7 @@ void main() {
   OperationDirection direction = OperationDirection.FromContactToUser;
 
   group('Initialization', (){
-    Debt debt = new Debt(amount, date, direction);
+    Credit debt = new Credit(amount, date, direction);
 
     test('debt check init amount', () {
       expect(debt.amount, amount);
@@ -28,14 +28,14 @@ void main() {
 
   group('Debt operations', () {
     test('debt add transaction', (){
-      Debt debt = new Debt(amount, date, direction);
+      Credit debt = new Credit(amount, date, direction);
       Transaction transaction = new Transaction(amount, date, direction);
       debt.addTransaction(transaction);
       expect(debt.transactions.length, 1);
     });
 
     test('Debt throw Exceeded exception', () {
-      Debt debt = new Debt(amount, date, direction);
+      Credit debt = new Credit(amount, date, direction);
       Transaction transaction1 = new Transaction(amount, date, OperationDirection.FromUserToContact);
       Transaction transaction2 = new Transaction(amount, date, OperationDirection.FromUserToContact);
 
