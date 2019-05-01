@@ -40,7 +40,7 @@ class ContactTableCell extends StatelessWidget {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("${contact.name} ${contact.lastName}",
+          Text("${contact.data.name} ${contact.data.lastName}",
               style: TextStyle(fontWeight: FontWeight.bold)),
           CreditText(contact.credit),
         ]);

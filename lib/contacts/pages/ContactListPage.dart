@@ -1,6 +1,7 @@
+import 'package:cdonline/contacts/ContactData.dart';
 import 'package:flutter/material.dart';
 
-import 'ContactDetailPage.dart';
+import '../widgets/ContactDetail.dart';
 import 'package:cdonline/contacts/widgets/ContactList.dart';
 import 'package:cdonline/contacts/Contact.dart';
 
@@ -21,7 +22,7 @@ class ContactListPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            ContactDetailPage(new Contact())));
+                            ContactDetail(ContactData.getDefalut())));
               },
             )
           ],

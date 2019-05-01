@@ -1,3 +1,4 @@
+import 'package:cdonline/contacts/ContactData.dart';
 import 'package:flutter/material.dart';
 
 import 'contacts/pages/ContactListPage.dart';
@@ -12,7 +13,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: _buildDarkTheme(),
-      home: ContactListPage(_createMokupContacts(10)),
+      home: ContactListPage(_createMokupContacts(15)),
     );
   }
 
@@ -43,7 +44,8 @@ class App extends StatelessWidget {
     List<Contact> contacts = new List<Contact>();
 
     for (int i = 0; i < numberOfContact; i++) {
-      Contact newContact = Contact.getDefault();
+      ContactData data = ContactData.getDefalut();
+      Contact newContact = Contact(data);
       Credit newCredit = new Credit(15.5, DateTime.now(), OperationDirection.FromContactToUser);
       newContact.setCredit(newCredit);
       contacts.add(newContact);
