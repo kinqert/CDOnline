@@ -10,7 +10,14 @@ class NewOperationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(child: Text("new page operation"),),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("New Operation"),
+        ),
+        body: Center(
+          child: Text("New operation page"),
+        ),
+      ),
     );
   }
 }

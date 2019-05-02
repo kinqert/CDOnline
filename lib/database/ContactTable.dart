@@ -1,3 +1,4 @@
+import 'package:cdonline/contacts/Contact.dart';
 import 'package:cdonline/contacts/ContactData.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -5,8 +6,8 @@ import 'DatabaseController.dart';
 
 class ContactTable {
   static final table = 'contacts';
-
   static final columnId = 'id';
+  
   static final columnName = 'name';
   static final columnLastname = 'lastname';
   static final columnPhone = 'phone';
@@ -55,12 +56,23 @@ class ContactTable {
 
   static Map<String, dynamic> _createRowFromData(ContactData data) {
     return {
+      columnId: data.id,
       columnName: data.name,
       columnLastname: data.lastName,
       columnPhone: data.phone,
       columnAddress: data.address,
       columnNote: data.note,
     };
+  }
+
+  static ContactData _createDataFromRow(Map<String, dynamic> row) {
+    return ContactData(
+        id: row[columnId],
+        name: row[columnName],
+        lastName: row[columnLastname],
+        phone: row[columnPhone],
+        address: row[columnAddress],
+        note: row[columnNote]);
   }
 
   static void insert(ContactData data) async {
@@ -70,18 +82,24 @@ class ContactTable {
     print('inserted row id: $id');
   }
 
-  static Future<List<ContactData>> allContact() async {
+  static Future<List<ContactData>> allContactData() async {
     List<ContactData> contacts = new List<ContactData>();
     final allRows = await _queryAllRows();
     print('query all rows:');
     allRows.forEach((row) {
-      ContactData data = ContactData(
-          name: row[columnName],
-          lastName: row[columnLastname],
-          phone: row[columnPhone],
-          address: row[columnAddress],
-          note: row[columnNote]);
+      ContactData data = _createDataFromRow(row);
       contacts.add(data);
+    });
+    return contacts;
+  }
+
+  static Future<List<Contact>> allContact() async {
+    List<Contact> contacts = new List<Contact>();
+    final allRows = await _queryAllRows();
+    print('query all rows:');
+    allRows.forEach((row) {
+      ContactData data = _createDataFromRow(row);
+      contacts.add(Contact(data));
     });
     return contacts;
   }

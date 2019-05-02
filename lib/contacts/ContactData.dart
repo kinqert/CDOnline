@@ -1,10 +1,10 @@
 class ContactData {
-  final int id;
-  final String name;
-  final String lastName;
-  final String phone;
-  final String address;
-  final String note;
+  int id;
+  String name;
+  String lastName;
+  String phone;
+  String address;
+  String note;
 
   ContactData({this.id, this.name, this.lastName, this.phone, this.address, this.note});
 

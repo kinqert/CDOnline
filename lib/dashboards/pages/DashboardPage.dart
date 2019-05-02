@@ -6,7 +6,14 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(child: Text("Dashboard page"),),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Dashboard"),
+        ),
+        body: Center(
+          child: Text("Dashboard page"),
+        ),
+      ),
     );
   }
 }

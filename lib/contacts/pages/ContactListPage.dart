@@ -1,8 +1,8 @@
-import 'package:cdonline/contacts/ContactData.dart';
-import 'package:cdonline/contacts/pages/ContactTabController.dart';
-import 'package:cdonline/operations/Credit.dart';
-import 'package:cdonline/operations/Operation.dart';
+import 'package:cdonline/contacts/pages/NewContactPage.dart';
+import 'package:cdonline/database/ContactTable.dart';
 import 'package:flutter/material.dart';
+import 'package:loading/loading.dart';
+import 'package:loading/indicator/pacman_indicator.dart';
 
 import 'package:cdonline/contacts/widgets/ContactList.dart';
 import 'package:cdonline/contacts/Contact.dart';
@@ -12,6 +12,19 @@ class ContactListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _loadWidget(context),
+      builder: (BuildContext context, AsyncSnapshot<List<Contact>> snapshot) =>
+        _buildPageOnSnapshot(context, snapshot),
+    );
+  }
+
+  Future<List<Contact>> _loadWidget(BuildContext context) async {
+    return await ContactTable.allContact();
+  }
+
+  Widget _buildPageOnSnapshot(
+      BuildContext context, AsyncSnapshot<List<Contact>> snapshot) {
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
@@ -19,31 +32,35 @@ class ContactListPage extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.person_add),
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ContactTabController(
-                            new Contact(ContactData.getDefalut()))));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => NewContactPage()));
               },
             )
           ],
           title: Text("Contact List"),
         ),
-        body: ContactList(_createMokupContacts(15)));
+        body: _buildBodyOnSnapshot(context, snapshot));
   }
 
-  List<Contact> _createMokupContacts(int numberOfContact) {
-    List<Contact> contacts = new List<Contact>();
+  Widget _buildBodyOnSnapshot(
+      BuildContext context, AsyncSnapshot<List<Contact>> snapshot) {
+    Widget loadingWidget = Container(
+        color: Theme.of(context).primaryColor,
+        child: Center(
+          child: Loading(indicator: PacmanIndicator(), size: 100.0),
+        ));
 
-    for (int i = 0; i < numberOfContact; i++) {
-      ContactData data = ContactData.getDefalut();
-      Contact newContact = Contact(data);
-      Credit newCredit = new Credit(
-          15.5, DateTime.now(), OperationDirection.FromUserToContact);
-      newContact.setCredit(newCredit);
-      contacts.add(newContact);
+    switch (snapshot.connectionState) {
+      case ConnectionState.none:
+        return Text("Connection not active");
+      case ConnectionState.waiting:
+        return loadingWidget;
+      case ConnectionState.active:
+        return loadingWidget;
+      case ConnectionState.done:
+        if (!snapshot.hasError) return ContactList(snapshot.data);
     }
 
-    return contacts;
+    return Text("Errore durante il caricamento dei dati");
   }
 }

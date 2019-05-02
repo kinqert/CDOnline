@@ -3,7 +3,7 @@ import 'package:cdonline/operations/Credit.dart';
 import 'package:cdonline/operations/CreditDelegate.dart';
 
 class Contact implements CreditDelegate {
-  final ContactData data;
+  ContactData data;
 
   Credit credit;
   List<Credit> historyDebt = new List<Credit>();

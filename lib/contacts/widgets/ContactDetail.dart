@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../ContactData.dart';
 
+abstract class ContactDetailDelegate {
+  void updateContactData(ContactData data);
+}
+
 class ContactDetail extends StatefulWidget {
   final ContactData data;
-  ContactDetail(this.data, {Key key}) : super(key: key);
+  final ContactDetailDelegate delegate;
+  const ContactDetail(this.data, this.delegate, {Key key}) : super(key: key);
 
   _ContactDetailState createState() => _ContactDetailState(data);
 }
@@ -15,6 +20,8 @@ class _ContactDetailState extends State<ContactDetail> {
   TextEditingController phoneController;
   TextEditingController addressController;
   TextEditingController noteController;
+
+  final _formKey = GlobalKey<FormState>();
 
   ContactData data;
 
@@ -33,7 +40,8 @@ class _ContactDetailState extends State<ContactDetail> {
             width: 75,
             height: 75,
           ),
-          _buildForm()
+          _buildForm(),
+          Text('ID: ${data.id}')
         ],
       ),
     );
@@ -41,6 +49,7 @@ class _ContactDetailState extends State<ContactDetail> {
 
   Widget _buildForm() {
     return Form(
+      key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[_buildTextField()],
@@ -53,13 +62,23 @@ class _ContactDetailState extends State<ContactDetail> {
       padding: EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
-          TextFormField(controller: nameController),
-          TextFormField(controller: lastnameController),
-          TextFormField(controller: phoneController),
-          TextFormField(controller: addressController),
-          TextFormField(controller: noteController),
+          _buildFormField(nameController, true),
+          _buildFormField(lastnameController, false),
+          _buildFormField(phoneController, false),
+          _buildFormField(addressController, false),
+          _buildFormField(noteController, false),
         ],
       ),
+    );
+  }
+
+  Widget _buildFormField(TextEditingController controller, bool notNull) {
+    return TextFormField(
+      controller: controller,
+      validator: (value) {
+        if (value.isEmpty) return 'Please add name';
+      },
+      onEditingComplete: updateIfValidate,
     );
   }
 
@@ -69,5 +88,25 @@ class _ContactDetailState extends State<ContactDetail> {
     phoneController = TextEditingController(text: data.phone);
     addressController = TextEditingController(text: data.address);
     noteController = TextEditingController(text: data.note);
+  }
+
+  void updateIfValidate() {
+    if (_formKey.currentState.validate())
+      setState(() {
+        _setContactDataFromText();
+        widget.delegate.updateContactData(data);
+      });
+  }
+
+  bool isValidate() {
+    return _formKey.currentState.validate();
+  }
+
+  void _setContactDataFromText() {
+    data.name = nameController.text;
+    data.lastName = lastnameController.text;
+    data.phone = phoneController.text;
+    data.address = addressController.text;
+    data.note = noteController.text;
   }
 }
