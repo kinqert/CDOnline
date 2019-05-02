@@ -12,13 +12,13 @@ class CreditText extends StatelessWidget {
     if (credit == null)
       return Text("Nessun credito/debito attivo");
     else {
-      String description = credit.direction == OperationDirection.FromUserToContact 
+      String description = credit.data.direction == OperationDirection.FromUserToContact 
         ? "Credit: " : "Debt: ";
       Widget descriptionText = Text(description);
 
-      Color amountColor = credit.direction == OperationDirection.FromUserToContact 
+      Color amountColor = credit.data.direction == OperationDirection.FromUserToContact 
         ? Theme.of(context).hintColor : Theme.of(context).errorColor;
-      Widget amountLeftText = Text("${credit.amount}€", style: new TextStyle(color: amountColor),);
+      Widget amountLeftText = Text("${credit.data.amount}€", style: new TextStyle(color: amountColor),);
 
       return Row(children: <Widget>[descriptionText, amountLeftText],);
     }

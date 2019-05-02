@@ -1,23 +1,24 @@
 import 'package:cdonline/contacts/Contact.dart';
 import 'package:cdonline/contacts/ContactData.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:cdonline/database/Table.dart';
 
-import 'DatabaseController.dart';
-
-class ContactTable {
-  static final table = 'contacts';
-  static final columnId = 'id';
-  
+class ContactTable extends Table<ContactData> {
+  static final table = 'Contacts';
+  static final id = 'id';
   static final columnName = 'name';
   static final columnLastname = 'lastname';
   static final columnPhone = 'phone';
   static final columnAddress = 'address';
   static final columnNote = 'note';
+  
+  static final ContactTable instance = ContactTable();
+
+  ContactTable() : super(table, id);
 
   static String getCreateString() {
     return '''
           CREATE TABLE $table (
-            $columnId INTEGER PRIMARY KEY,
+            $id INTEGER PRIMARY KEY,
             $columnName TEXT NOT NULL,
             $columnLastname TEXT,
             $columnPhone TEXT,
@@ -27,34 +28,7 @@ class ContactTable {
           ''';
   }
 
-  static Future<int> _insert(Map<String, dynamic> row) async {
-    Database db = await DatabaseController.instance.database;
-    return await db.insert(table, row);
-  }
-
-  static Future<List<Map<String, dynamic>>> _queryAllRows() async {
-    Database db = await DatabaseController.instance.database;
-    return await db.query(table);
-  }
-
-  static Future<int> _queryRowCount() async {
-    Database db = await DatabaseController.instance.database;
-    return Sqflite.firstIntValue(
-        await db.rawQuery('SELECT COUNT(*) FROM $table'));
-  }
-
-  static Future<int> _update(Map<String, dynamic> row) async {
-    Database db = await DatabaseController.instance.database;
-    int id = row[columnId];
-    return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
-  }
-
-  static Future<int> _delete(int id) async {
-    Database db = await DatabaseController.instance.database;
-    return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
-  }
-
-  static Map<String, dynamic> _createRowFromData(ContactData data) {
+  Map<String, dynamic> _createRowFromData(ContactData data) {
     return {
       columnId: data.id,
       columnName: data.name,
@@ -65,7 +39,7 @@ class ContactTable {
     };
   }
 
-  static ContactData _createDataFromRow(Map<String, dynamic> row) {
+  ContactData _createDataFromRow(Map<String, dynamic> row) {
     return ContactData(
         id: row[columnId],
         name: row[columnName],
@@ -75,45 +49,31 @@ class ContactTable {
         note: row[columnNote]);
   }
 
-  static void insert(ContactData data) async {
-    // row to insert
-    Map<String, dynamic> row = _createRowFromData(data);
-    final id = await _insert(row);
-    print('inserted row id: $id');
+  void insertContact(ContactData data) async {
+    insert(data, _createRowFromData);
   }
 
-  static Future<List<ContactData>> allContactData() async {
-    List<ContactData> contacts = new List<ContactData>();
-    final allRows = await _queryAllRows();
-    print('query all rows:');
-    allRows.forEach((row) {
-      ContactData data = _createDataFromRow(row);
-      contacts.add(data);
-    });
-    return contacts;
+  Future<List<ContactData>> allContactData() async {
+    return allData(_createDataFromRow);
   }
 
-  static Future<List<Contact>> allContact() async {
+  Future<List<Contact>> allContact() async {
     List<Contact> contacts = new List<Contact>();
-    final allRows = await _queryAllRows();
-    print('query all rows:');
-    allRows.forEach((row) {
-      ContactData data = _createDataFromRow(row);
+    
+    for (ContactData data in await allContactData()) {
       contacts.add(Contact(data));
-    });
+    }
+
     return contacts;
   }
 
-  static void update(ContactData data) async {
+  void updateContact(ContactData data) async {
     // row to update
-    Map<String, dynamic> row = _createRowFromData(data);
-    final rowsAffected = await _update(row);
-    print('updated $rowsAffected row(s)');
+    updateData(data, _createRowFromData);
   }
 
-  static void delete(ContactData data) async {
+  void deleteContact(ContactData data) async {
     // Assuming that the number of rows is the id for the last row.
-    final rowsDeleted = await _delete(data.id);
-    print('deleted $rowsDeleted row(s): row ${data.id}');
+    deleteData(data.id);
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cdonline/database/ContactTable.dart';
+import 'package:cdonline/database/OperationTable.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -34,5 +35,6 @@ class DatabaseController {
 
   Future _onCreate(Database db, int version) async {
     await db.execute(ContactTable.getCreateString());
+    await db.execute(CreditTable.getCreateString());
   }
 }

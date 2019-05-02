@@ -25,7 +25,7 @@ class _NewContactPageState extends State<NewContactPage>
           IconButton(
             icon: Icon(Icons.done),
             onPressed: () {
-              ContactTable.insert(data);
+              ContactTable.instance.insertContact(data);
               Navigator.pop(context);
             },
           )

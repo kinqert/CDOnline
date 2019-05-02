@@ -20,7 +20,7 @@ class ContactListPage extends StatelessWidget {
   }
 
   Future<List<Contact>> _loadWidget(BuildContext context) async {
-    return await ContactTable.allContact();
+    return await ContactTable.instance.allContact();
   }
 
   Widget _buildPageOnSnapshot(

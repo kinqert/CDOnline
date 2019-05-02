@@ -1,23 +1,16 @@
 import 'Transaction.dart';
 import 'Operation.dart';
-import 'CreditDelegate.dart';
 import 'package:cdonline/operations/exceptions/DebtExceededException.dart';
 
-class Credit implements Operation {
-  final double amount;
-  final DateTime dateTime;
-  final OperationDirection direction;
+abstract class CreditDelegate {
+  void creditExtinguished();
+}
+class Credit extends Operation {
   CreditDelegate delegate;
 
   List<Transaction> transactions = new List<Transaction>();
 
-  Credit(this.amount, this.dateTime, this.direction);
-
-  @override
-  DateTime getDate() => dateTime;
-
-  @override
-  double getAmount() => amount;
+  Credit(OperationData data) : super(data);
 
   // TODO: puo essere ottimizzata
   void addTransaction(Transaction transaction) {
@@ -36,15 +29,15 @@ class Credit implements Operation {
   double getTransactionsTotalPayed() {
     double total = 0;
     for (var transaction in transactions) {
-      if (direction == transaction.direction) 
-        total -= transaction.amount;
+      if (data.direction == transaction.data.direction) 
+        total -= transaction.data.amount;
       else
-        total += transaction.amount;
+        total += transaction.data.amount;
     }
     return total;
   }
 
-  double getAmountLeft() => amount - getTransactionsTotalPayed();
+  double getAmountLeft() => data.amount - getTransactionsTotalPayed();
 
   bool isDebtPayed() => getAmountLeft() <= 0;
 

@@ -38,6 +38,6 @@ class ContactTabController extends StatelessWidget implements ContactDetailDeleg
   @override
   void updateContactData(ContactData data) {
     contact.data = data;
-    ContactTable.update(data);
+    ContactTable.instance.updateContact(data);
   }
 }
