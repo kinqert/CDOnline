@@ -1,11 +1,5 @@
-import 'package:cdonline/contacts/ContactData.dart';
 import 'package:cdonline/pages/BottomTabController.dart';
 import 'package:flutter/material.dart';
-
-import 'contacts/pages/ContactListPage.dart';
-import 'contacts/Contact.dart';
-import 'operations/Credit.dart';
-import 'operations/Operation.dart';
 
 void main() => runApp(App());
 
@@ -28,7 +22,10 @@ class App extends StatelessWidget {
       hintColor: Colors.greenAccent[400],
       errorColor: Color(0xffff3131),
       bottomAppBarColor: Colors.blueGrey[900],
-
+      cardColor: Colors.blueGrey[900],
+      bottomAppBarTheme: BottomAppBarTheme(color: Colors.blueGrey[900]),
+      scaffoldBackgroundColor: Colors.blueGrey[700],
+      
       // Define the default Font Family
       fontFamily: 'Montserrat',
 

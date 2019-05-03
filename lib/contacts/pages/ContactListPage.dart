@@ -7,20 +7,28 @@ import 'package:loading/indicator/pacman_indicator.dart';
 import 'package:cdonline/contacts/widgets/ContactList.dart';
 import 'package:cdonline/contacts/Contact.dart';
 
-class ContactListPage extends StatelessWidget {
-  const ContactListPage({Key key}) : super(key: key);
+class ContactListPage extends StatefulWidget {
+  ContactListPage({Key key}) : super(key: key);
+
+  _ContactListPageState createState() => _ContactListPageState();
+}
+
+class _ContactListPageState extends State<ContactListPage> {
+  List<Contact> contacts = new List<Contact>();
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _loadWidget(context),
-      builder: (BuildContext context, AsyncSnapshot<List<Contact>> snapshot) =>
-        _buildPageOnSnapshot(context, snapshot),
-    );
+        future: ContactTable.instance.allContact(),
+        builder: (BuildContext context, AsyncSnapshot<List<Contact>> snapshot) {
+          _buildDataOnSnapshot(snapshot);
+          return _buildPageOnSnapshot(context, snapshot);
+        });
   }
 
-  Future<List<Contact>> _loadWidget(BuildContext context) async {
-    return await ContactTable.instance.allContact();
+  void _buildDataOnSnapshot(AsyncSnapshot<List<Contact>> snapshot) {
+    if (snapshot.hasData)
+        contacts += snapshot.data;
   }
 
   Widget _buildPageOnSnapshot(
@@ -32,8 +40,7 @@ class ContactListPage extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.person_add),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => NewContactPage()));
+                newContactTap(context);
               },
             )
           ],
@@ -62,5 +69,13 @@ class ContactListPage extends StatelessWidget {
     }
 
     return Text("Errore durante il caricamento dei dati");
+  }
+
+  void newContactTap(BuildContext context) async {
+    final Contact newContact = await Navigator.push<Contact>(
+        context, MaterialPageRoute(builder: (context) => NewContactPage()));
+    setState(() {
+        contacts.add(newContact);
+    });
   }
 }

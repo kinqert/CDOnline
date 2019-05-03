@@ -3,6 +3,8 @@ import 'package:cdonline/contacts/widgets/ContactDetail.dart';
 import 'package:cdonline/database/ContactTable.dart';
 import 'package:flutter/material.dart';
 
+import '../Contact.dart';
+
 class NewContactPage extends StatefulWidget {
   NewContactPage({Key key}) : super(key: key);
 
@@ -26,7 +28,7 @@ class _NewContactPageState extends State<NewContactPage>
             icon: Icon(Icons.done),
             onPressed: () {
               ContactTable.instance.insertContact(data);
-              Navigator.pop(context);
+              Navigator.pop(context, Contact(data));
             },
           )
         ],

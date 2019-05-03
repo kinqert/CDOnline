@@ -1,3 +1,6 @@
+import 'package:cdonline/operations/widgets/CreditDetail.dart';
+import 'package:flutter/src/widgets/framework.dart';
+
 import 'Transaction.dart';
 import 'Operation.dart';
 import 'package:cdonline/operations/exceptions/DebtExceededException.dart';

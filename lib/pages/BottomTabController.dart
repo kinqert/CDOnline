@@ -1,6 +1,6 @@
 import 'package:cdonline/contacts/pages/ContactListPage.dart';
 import 'package:cdonline/dashboards/pages/DashboardPage.dart';
-import 'package:cdonline/operations/pages/NewOperationPage.dart';
+import 'package:cdonline/operations/pages/SelectOperationPage.dart';
 import 'package:flutter/material.dart';
 
 class BottomTabController extends StatefulWidget {
@@ -13,7 +13,7 @@ class _BottomTabControllerState extends State<BottomTabController> {
   int _index = 2;
   final List<Widget> _navItems = [
     DashboardPage(),
-    NewOperationPage(),
+    SelectOperationPage(),
     ContactListPage(),
   ];
   @override

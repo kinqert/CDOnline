@@ -24,6 +24,7 @@ dependencies:
     path: any
     path_provider: any
     loading: ^1.0.0
+    flutter_masked_text: ^0.8.0
 
     # The following adds the Cupertino Icons font to your application.
     # Use with the CupertinoIcons class for iOS style icons.
