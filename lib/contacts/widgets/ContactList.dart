@@ -9,20 +9,12 @@ class ContactList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(children: _buildColumsElement(context));
-  }
-
-  List<Widget> _buildColumsElement(BuildContext context) {
-    List<Widget> rows = new List<Widget>();
-
-    for (var contact in contacts) {
-      ContactTableCell cell = ContactTableCell(contact);
+    return ListView.builder(itemCount: contacts.length, itemBuilder: (context, index) {
+      ContactTableCell cell = ContactTableCell(contacts[index]);
       Container container = Container(child: cell, padding: EdgeInsets.only(top: 20, left: 10, bottom: 0, right: 10),);
-      rows.add(GestureDetector(child: container, onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ContactTabController(contact)));
-      },));
-    }
-
-    return rows;
+      return GestureDetector(child: container, onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ContactTabController(contacts[index])));
+      },);
+    },);
   }
 }
