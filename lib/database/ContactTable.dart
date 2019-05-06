@@ -2,7 +2,6 @@ import 'package:cdonline/contacts/Contact.dart';
 import 'package:cdonline/contacts/ContactData.dart';
 import 'package:cdonline/database/CreditTable.dart';
 import 'package:cdonline/database/Table.dart';
-import 'package:cdonline/operations/Credit.dart';
 
 class ContactTable extends Table<ContactData> {
   static final table = 'Contacts';

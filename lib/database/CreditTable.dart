@@ -57,6 +57,13 @@ class CreditTable extends Table<OperationData> {
     return credits.length > 0 ? credits.last : null;
   }
 
+  Future<List<Credit>> getAllContactCredit(Contact contact) async {
+    // TODO: MUST OPTIMIZED!
+    List<Credit> credits = await allCredit();
+    credits.retainWhere((credit) => credit.data.contactId == contact.data.id);
+    return credits;
+  }
+
   void insertCredit(OperationData data) async {
     insert(data, _createRowFromData);
   }

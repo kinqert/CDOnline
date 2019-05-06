@@ -6,7 +6,13 @@ class CDColors {
   static Color red = Color(0xffff3131);
   static Color green = Color(0xff5fff89);
 
-  static Color getDirectionColor(OperationData data) {
-    return data.direction == OperationDirection.FromUserToContact ? green : red;
+  static Color getOperationColor(Operation operation) {
+    var fromUToC = operation.data.direction == OperationDirection.FromUserToContact;
+
+    if(operation is Credit) {
+      return fromUToC ? green : red;
+    }
+    
+    return fromUToC ? red : green;
   }
 }

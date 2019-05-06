@@ -4,24 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class AmountField extends StatefulWidget {
-  final OperationData data;
-  AmountField(this.data, {Key key}) : super(key: key);
+  final Operation operation;
+  AmountField(this.operation, {Key key}) : super(key: key);
 
-  _AmountFieldState createState() => _AmountFieldState(data);
+  _AmountFieldState createState() => _AmountFieldState(operation);
 }
 
 class _AmountFieldState extends State<AmountField> {
   MoneyMaskedTextController controller;
-  OperationData data;
+  Operation operation;
 
-  _AmountFieldState(this.data) {
-    controller = new MoneyMaskedTextController(initialValue: data.amount, rightSymbol: '€');
+  _AmountFieldState(this.operation) {
+    controller = new MoneyMaskedTextController(initialValue: operation.data.amount, rightSymbol: '€');
     controller.addListener(_amountSetted);
   }
 
   @override
   Widget build(BuildContext context) {
-    var border = UnderlineInputBorder(borderSide: BorderSide(color: CDColors.getDirectionColor(data)));
+    var border = UnderlineInputBorder(borderSide: BorderSide(color: CDColors.getOperationColor(operation)));
 
     return TextField(
       decoration: InputDecoration(
@@ -37,7 +37,7 @@ class _AmountFieldState extends State<AmountField> {
 
   void _amountSetted() {
     setState(() {
-      data.amount = controller.numberValue;
+      operation.data.amount = controller.numberValue;
     });
   }
 }

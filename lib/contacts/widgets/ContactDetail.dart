@@ -31,18 +31,19 @@ class _ContactDetailState extends State<ContactDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).backgroundColor,
-      child: ListView(
-        children: <Widget>[
-          Image.asset(
-            'images/defaultUser.png',
-            width: 75,
-            height: 75,
-          ),
-          _buildForm(),
-          Text('ID: ${data.id}')
-        ],
+    return Card(
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: ListView(
+          children: <Widget>[
+            Image.asset(
+              'images/defaultUser.png',
+              width: 75,
+              height: 75,
+            ),
+            _buildForm()
+          ],
+        ),
       ),
     );
   }

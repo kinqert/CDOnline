@@ -29,7 +29,7 @@ class _CreditDetailState extends State<CreditDetail> implements CDSwitchDelegate
             child: Column(
               children: <Widget>[
                 _buildTitle(),
-                AmountField(credit.data),
+                AmountField(credit),
                 CDSwitch(credit, this)
               ],
             ),

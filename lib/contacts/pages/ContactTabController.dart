@@ -1,11 +1,9 @@
 import 'package:cdonline/contacts/Contact.dart';
-import 'package:cdonline/contacts/ContactData.dart';
-import 'package:cdonline/contacts/widgets/ContactDetail.dart';
+import 'package:cdonline/contacts/widgets/ContactDetailView.dart';
 import 'package:cdonline/contacts/widgets/ContactOperationsList.dart';
-import 'package:cdonline/database/ContactTable.dart';
 import 'package:flutter/material.dart';
 
-class ContactTabController extends StatelessWidget implements ContactDetailDelegate {
+class ContactTabController extends StatelessWidget {
   final Contact contact;
   const ContactTabController(this.contact, {Key key}) : super(key: key);
 
@@ -27,17 +25,11 @@ class ContactTabController extends StatelessWidget implements ContactDetailDeleg
             ),
           ),
           body: TabBarView(children: <Widget>[
-            ContactDetail(contact.data, this),
-            ContactOperationsList()
+            ContactDetailView(contact),
+            ContactOperationsList(contact)
           ],),
         ),
       ),
     );
-  }
-
-  @override
-  void updateContactData(ContactData data) {
-    contact.data = data;
-    ContactTable.instance.updateContact(data);
   }
 }
