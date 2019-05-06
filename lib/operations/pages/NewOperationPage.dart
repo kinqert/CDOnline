@@ -16,6 +16,7 @@ class NewOperationPage extends StatefulWidget {
 }
 
 class _NewOperationPageState extends State<NewOperationPage> {
+  bool operationValidated = false;
   Operation operation;
 
   _NewOperationPageState(this.operation);
@@ -26,9 +27,7 @@ class _NewOperationPageState extends State<NewOperationPage> {
       future: ContactTable.instance.allContactData(),
       builder: (context, snapshot) {
         return Scaffold(
-            appBar: AppBar(
-              title: Text('New operation'),
-            ),
+            appBar: AppBar(title: Text('New operation'), actions: <Widget>[_buildDoneIcon()]),
             body: Container(
               padding: EdgeInsets.only(top: 20, bottom: 20),
               child: Column(
@@ -42,12 +41,16 @@ class _NewOperationPageState extends State<NewOperationPage> {
     );
   }
 
+  Widget _buildDoneIcon() {
+    return IconButton(
+        icon: Icon(Icons.done),
+        onPressed: operationValidated ? _operationDone : null);
+  }
+
   Widget _buildSliderFromSnapshot(
       BuildContext context, AsyncSnapshot<List<ContactData>> snapshot) {
     if (snapshot.hasData) {
-      return Container(
-          height: 95,
-          child: ContactSlider(snapshot.data));
+      return Container(height: 95, child: ContactSlider(snapshot.data));
     }
     return Text("No contact founded");
   }
@@ -56,4 +59,6 @@ class _NewOperationPageState extends State<NewOperationPage> {
     if (operation is Credit) return CreditDetail(operation);
     return Text("This operation is not supported yet");
   }
+
+  void _operationDone() {}
 }
