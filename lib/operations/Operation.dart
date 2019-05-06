@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 enum OperationDirection {
   FromUserToContact, FromContactToUser
 }
@@ -13,6 +11,12 @@ class OperationData {
   OperationDirection direction;
 
   OperationData({this.id, this.contactId, this.amount, this.date, this.direction, this.description});
+
+  OperationData.newAmount() {
+    amount = 0.0;
+    direction = OperationDirection.FromUserToContact;
+    description = '';
+  }
 }
 
 abstract class Operation {

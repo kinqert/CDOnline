@@ -15,7 +15,7 @@ class CreditDetail extends StatefulWidget {
   _CreditDetailState createState() => _CreditDetailState(credit);
 }
 
-class _CreditDetailState extends State<CreditDetail> {
+class _CreditDetailState extends State<CreditDetail> implements CDSwitchDelegate {
   Credit credit;
 
   _CreditDetailState(this.credit);
@@ -29,8 +29,8 @@ class _CreditDetailState extends State<CreditDetail> {
             child: Column(
               children: <Widget>[
                 _buildTitle(),
-                AmountField(),
-                CDSwitch(credit)
+                AmountField(credit.data),
+                CDSwitch(credit, this)
               ],
             ),
         );
@@ -39,10 +39,18 @@ class _CreditDetailState extends State<CreditDetail> {
   }
 
   Widget _buildTitle() {
-    return _switchValue() == true ? Text('New Credit') : Text('New Debit');
+    String textTitle = _switchValue() == true ? 'New Credit' : 'New Debit';
+    return Text(textTitle, style: TextStyle(fontWeight: FontWeight.bold),);
   }
 
   bool _switchValue() {
-    return credit.data.direction == OperationDirection.FromContactToUser;
+    return credit.data.direction == OperationDirection.FromUserToContact;
+  }
+
+  @override
+  void switchChanged(OperationDirection direction) {
+    setState(() {
+      credit.data.direction = direction;
+    });
   }
 }

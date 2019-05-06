@@ -26,8 +26,8 @@ class SelectOperationPage extends StatelessWidget {
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          NewOperationPage(Transaction(OperationData())))),
+                      builder: (context) => NewOperationPage(
+                          Transaction(OperationData.newAmount())))),
             ),
             GestureDetector(
               child: OperationTile(Icons.trending_up, "Add new Credit/Debit",
@@ -36,7 +36,7 @@ class SelectOperationPage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          NewOperationPage(Credit(OperationData())))),
+                          NewOperationPage(Credit(OperationData.newAmount())))),
             )
           ],
         ),

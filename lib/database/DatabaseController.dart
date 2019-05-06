@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cdonline/database/ContactTable.dart';
-import 'package:cdonline/database/OperationTable.dart';
+import 'package:cdonline/database/CreditTable.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';

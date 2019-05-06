@@ -1,6 +1,8 @@
 import 'package:cdonline/contacts/Contact.dart';
 import 'package:cdonline/contacts/ContactData.dart';
+import 'package:cdonline/database/CreditTable.dart';
 import 'package:cdonline/database/Table.dart';
+import 'package:cdonline/operations/Credit.dart';
 
 class ContactTable extends Table<ContactData> {
   static final table = 'Contacts';
@@ -61,7 +63,9 @@ class ContactTable extends Table<ContactData> {
     List<Contact> contacts = new List<Contact>();
     
     for (ContactData data in await allContactData()) {
-      contacts.add(Contact(data));
+      var contact = Contact(data);
+      contact.credit = await CreditTable.instance.getContactCredit(contact);
+      contacts.add(contact);
     }
 
     return contacts;

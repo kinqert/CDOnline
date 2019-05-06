@@ -2,18 +2,15 @@ import 'package:cdonline/operations/Credit.dart';
 import 'package:cdonline/operations/Operation.dart';
 import 'package:flutter/material.dart';
 
-class CDSwitch extends StatefulWidget {
-  final Credit credit;
-
-  CDSwitch(this.credit, {Key key}) : super(key: key);
-
-  _CDSwitchState createState() => _CDSwitchState(credit);
+abstract class CDSwitchDelegate {
+  void switchChanged(OperationDirection direction);
 }
 
-class _CDSwitchState extends State<CDSwitch> {
-  Credit credit;
+class CDSwitch extends StatelessWidget {
+  final Credit credit;
+  final CDSwitchDelegate delegate;
 
-  _CDSwitchState(this.credit);
+  const CDSwitch(this.credit, this.delegate);
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +20,9 @@ class _CDSwitchState extends State<CDSwitch> {
       children: <Widget>[
         Text('Credit'),
         Switch(
-          activeColor: theme.hintColor,
-          inactiveTrackColor: Colors.red[800],
-          inactiveThumbColor: theme.errorColor,
+          activeColor: theme.errorColor,
+          inactiveTrackColor: Colors.green[800],
+          inactiveThumbColor: theme.hintColor,
           value: _switchValue(),
           onChanged: _directionChanged,
         ),
@@ -39,11 +36,10 @@ class _CDSwitchState extends State<CDSwitch> {
   }
 
   void _directionChanged(bool value) {
-    setState(() {
-      credit.data.direction =
-          credit.data.direction == OperationDirection.FromUserToContact
-              ? OperationDirection.FromContactToUser
-              : OperationDirection.FromUserToContact;
-    });
+    var direction =
+        credit.data.direction == OperationDirection.FromUserToContact
+            ? OperationDirection.FromContactToUser
+            : OperationDirection.FromUserToContact;
+    delegate?.switchChanged(direction);
   }
 }

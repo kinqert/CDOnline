@@ -2,19 +2,26 @@ import 'package:cdonline/contacts/ContactData.dart';
 import 'package:cdonline/contacts/widgets/ContactMini.dart';
 import 'package:flutter/material.dart';
 
+abstract class ContactSliderDelegate {
+  void contactsUpdated();
+}
 class ContactSlider extends StatefulWidget {
   final List<ContactData> contacts;
+  final List<ContactData> selectedContacts;
+  final ContactSliderDelegate delegate;
 
-  const ContactSlider(this.contacts, {Key key}) : super(key: key);
+  const ContactSlider(this.contacts, this.selectedContacts, this.delegate, {Key key}) : super(key: key);
 
-  _ContactSliderState createState() => _ContactSliderState(this.contacts);
+  _ContactSliderState createState() => _ContactSliderState(contacts, selectedContacts, delegate);
 }
 
 class _ContactSliderState extends State<ContactSlider> {
   List<ContactData> contacts;
-  List<int> selectedContacts = List<int>();
+  List<ContactData> selectedContacts = List<ContactData>();
+  ContactSliderDelegate delegate;
 
-  _ContactSliderState(this.contacts);
+
+  _ContactSliderState(this.contacts, this.selectedContacts, this.delegate);
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +46,15 @@ class _ContactSliderState extends State<ContactSlider> {
 
   void contactTap(int index) {
     setState(() {
-      if (!selectedContacts.remove(index)) {
-        selectedContacts.add(index);
+      if (!selectedContacts.remove(contacts[index])) {
+        selectedContacts.add(contacts[index]);
       }
+      delegate.contactsUpdated();
     });
   }
 
   Widget _buildContactMiniDecorated(BuildContext context, int index) {
-    Color color = selectedContacts.contains(index) ? Theme.of(context).accentColor : Theme.of(context).primaryColor;
+    Color color = selectedContacts.contains(contacts[index]) ? Theme.of(context).accentColor : Theme.of(context).primaryColor;
     Decoration decoration = BoxDecoration(
           border: Border.all(color: color, width: 3),
           borderRadius: BorderRadius.circular(20));
