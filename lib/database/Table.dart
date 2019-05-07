@@ -4,33 +4,35 @@ import 'DatabaseController.dart';
 abstract class Table<T> {
   final String tableName;
   final String columnId;
+  Database db;
 
-  Table(this.tableName, this.columnId);
+  Table(this.tableName, this.columnId) {
+    loadDb();
+  }
+
+  void loadDb() async {
+    db = await DatabaseController.instance.database;
+  }
 
   Future<int> _insert(Map<String, dynamic> row) async {
-    Database db = await DatabaseController.instance.database;
     return await db.insert(tableName, row);
   }
 
   Future<List<Map<String, dynamic>>> _queryAllRows() async {
-    Database db = await DatabaseController.instance.database;
     return await db.query(tableName);
   }
 
   Future<int> _queryRowCount() async {
-    Database db = await DatabaseController.instance.database;
     return Sqflite.firstIntValue(
         await db.rawQuery('SELECT COUNT(*) FROM $tableName'));
   }
 
   Future<int> _update(Map<String, dynamic> row) async {
-    Database db = await DatabaseController.instance.database;
     int id = row[columnId];
     return await db.update(tableName, row, where: '$columnId = ?', whereArgs: [id]);
   }
 
   Future<int> _delete(int id) async {
-    Database db = await DatabaseController.instance.database;
     return await db.delete(tableName, where: '$columnId = ?', whereArgs: [id]);
   }
 

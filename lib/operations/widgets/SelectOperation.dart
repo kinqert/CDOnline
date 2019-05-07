@@ -22,7 +22,7 @@ class SelectOperation extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => NewOperationPage(
-                          Transaction(OperationData.newAmount())))),
+                          Transaction(TransactionData.newAmount())))),
             ),
             GestureDetector(
               child: OperationTile(Icons.trending_up, "Add new Credit/Debit",
