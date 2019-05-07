@@ -10,10 +10,10 @@ class ContactData {
 
   static ContactData getDefalut() {
     return ContactData(
-        name: "Nome",
-        lastName: "Cognome",
-        phone: "000-000-000",
-        address: "Indirizzo civico",
-        note: "Descrizone contatto");
+        name: "",
+        lastName: "",
+        phone: "",
+        address: "",
+        note: "");
   }
 }

@@ -11,7 +11,7 @@ class ContactList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(itemCount: contacts.length, itemBuilder: (context, index) {
       ContactTableCell cell = ContactTableCell(contacts[index]);
-      Container container = Container(child: cell, padding: EdgeInsets.only(top: 20, left: 10, bottom: 0, right: 10),);
+      Container container = Container(child: cell, padding: EdgeInsets.only(top: 10, left: 5, bottom: 0, right: 5),);
       return GestureDetector(child: container, onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => ContactTabController(contacts[index])));
       },);

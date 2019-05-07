@@ -18,6 +18,14 @@ abstract class Table<T> {
     return await db.insert(tableName, row);
   }
 
+  Future<List<Map<String, dynamic>>> _tryQueryAllRows() async {
+    try {
+      return await _queryAllRows();
+    } catch (error) {
+      return List<Map<String, dynamic>>();
+    }
+  }
+
   Future<List<Map<String, dynamic>>> _queryAllRows() async {
     return await db.query(tableName);
   }
@@ -45,7 +53,7 @@ abstract class Table<T> {
 
   Future<List<T>> allData(Function createDataFromRow) async {
     List<T> listData = new List<T>();
-    final allRows = await _queryAllRows();
+    final allRows = await _tryQueryAllRows();
     print('query all rows:');
     allRows.forEach((row) {
       T data = createDataFromRow(row);

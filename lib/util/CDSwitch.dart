@@ -6,15 +6,43 @@ abstract class CDSwitchDelegate {
   void switchChanged(OperationDirection direction);
 }
 
-class CDSwitch extends StatelessWidget {
-  final Credit credit;
+class DirectionSwitch extends StatelessWidget {
+  final Operation operation;
   final CDSwitchDelegate delegate;
 
-  const CDSwitch(this.credit, this.delegate);
+  const DirectionSwitch(this.operation, this.delegate);
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    ThemeData theme = Theme.of(context);
+    return _buildSwitch(theme);
+  }
+
+  Widget _buildSwitch(ThemeData theme) {
+    if (operation is Credit)
+      return _builCreditSwitch(theme);
+    else
+      return _buildTransactionSwitch(theme);
+  }
+
+  Widget _buildTransactionSwitch(ThemeData theme) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Text('Given'),
+        Switch(
+          activeColor: theme.hintColor,
+          inactiveTrackColor: Colors.red[800],
+          inactiveThumbColor: theme.errorColor,
+          value: _switchValue(),
+          onChanged: _directionChanged,
+        ),
+        Text('Recived')
+      ],
+    );
+  }
+
+  Widget _builCreditSwitch(ThemeData theme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
@@ -32,12 +60,12 @@ class CDSwitch extends StatelessWidget {
   }
 
   bool _switchValue() {
-    return credit.data.direction == OperationDirection.FromContactToUser;
+    return operation.data.direction == OperationDirection.FromContactToUser;
   }
 
   void _directionChanged(bool value) {
     var direction =
-        credit.data.direction == OperationDirection.FromUserToContact
+        operation.data.direction == OperationDirection.FromUserToContact
             ? OperationDirection.FromContactToUser
             : OperationDirection.FromUserToContact;
     delegate?.switchChanged(direction);

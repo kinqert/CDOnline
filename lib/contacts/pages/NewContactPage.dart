@@ -17,7 +17,6 @@ class _NewContactPageState extends State<NewContactPage>
 
   @override
   Widget build(BuildContext context) {
-    ContactData data = ContactData.getDefalut();
     ContactDetail detail = ContactDetail(data, this);
 
     return Scaffold(

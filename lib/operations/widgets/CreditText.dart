@@ -18,7 +18,7 @@ class CreditText extends StatelessWidget {
 
       Color amountColor = credit.data.direction == OperationDirection.FromUserToContact 
         ? Theme.of(context).hintColor : Theme.of(context).errorColor;
-      Widget amountLeftText = Text("${credit.data.amount}€", style: new TextStyle(color: amountColor),);
+      Widget amountLeftText = Text("${credit.getAmountLeft()}€", style: new TextStyle(color: amountColor),);
 
       return Row(children: <Widget>[descriptionText, amountLeftText],);
     }

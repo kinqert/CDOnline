@@ -1,13 +1,14 @@
-import 'package:cdonline/contacts/ContactData.dart';
 import 'package:cdonline/contacts/widgets/ContactMini.dart';
 import 'package:flutter/material.dart';
+
+import '../Contact.dart';
 
 abstract class ContactSliderDelegate {
   void contactsUpdated();
 }
 class ContactSlider extends StatefulWidget {
-  final List<ContactData> contacts;
-  final List<ContactData> selectedContacts;
+  final List<Contact> contacts;
+  final List<Contact> selectedContacts;
   final ContactSliderDelegate delegate;
 
   const ContactSlider(this.contacts, this.selectedContacts, this.delegate, {Key key}) : super(key: key);
@@ -16,8 +17,8 @@ class ContactSlider extends StatefulWidget {
 }
 
 class _ContactSliderState extends State<ContactSlider> {
-  List<ContactData> contacts;
-  List<ContactData> selectedContacts = List<ContactData>();
+  List<Contact> contacts;
+  List<Contact> selectedContacts = List<Contact>();
   ContactSliderDelegate delegate;
 
 
@@ -62,6 +63,6 @@ class _ContactSliderState extends State<ContactSlider> {
     return Container(
         padding: EdgeInsets.all(10),
         decoration: decoration,
-        child: ContactMini(contacts[index]));
+        child: ContactMini(contacts[index].data));
   }
 }

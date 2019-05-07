@@ -2,6 +2,7 @@ import 'package:cdonline/contacts/Contact.dart';
 import 'package:cdonline/contacts/ContactData.dart';
 import 'package:cdonline/database/CreditTable.dart';
 import 'package:cdonline/database/Table.dart';
+import 'package:cdonline/database/TransactionTable.dart';
 
 class ContactTable extends Table<ContactData> {
   static final table = 'Contacts';
@@ -11,7 +12,7 @@ class ContactTable extends Table<ContactData> {
   static final columnPhone = 'phone';
   static final columnAddress = 'address';
   static final columnNote = 'note';
-  
+
   static final ContactTable instance = ContactTable();
 
   ContactTable() : super(table, id);
@@ -60,7 +61,7 @@ class ContactTable extends Table<ContactData> {
 
   Future<List<Contact>> allContact() async {
     List<Contact> contacts = new List<Contact>();
-    
+
     for (ContactData data in await allContactData()) {
       var contact = Contact(data);
       contact.credit = await CreditTable.instance.getContactCredit(contact);
@@ -71,12 +72,12 @@ class ContactTable extends Table<ContactData> {
   }
 
   void updateContact(ContactData data) async {
-    // row to update
     updateData(data, _createRowFromData);
   }
 
-  void deleteContact(ContactData data) async {
-    // Assuming that the number of rows is the id for the last row.
-    deleteData(data.id);
+  void deleteContact(Contact contact) async {
+    TransactionTable.instance.deleteAllTransactionFromContact(contact);
+    CreditTable.instance.deleteAllCreditFromContact(contact);
+    deleteData(contact.data.id);
   }
 }

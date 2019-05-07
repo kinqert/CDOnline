@@ -1,4 +1,4 @@
-import 'package:cdonline/database/CreditTable.dart';
+import 'package:cdonline/database/OperationTable.dart';
 import 'package:cdonline/operations/widgets/OperationList.dart';
 import 'package:cdonline/operations/widgets/SelectOperation.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ class _OperationPageState extends State<OperationPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: CreditTable.instance.allCredit(),
+      future: OperationTable.getAllOperations(),
       builder: (context, snapshot) {
         Widget operationList = Text("No operation Founded");
 

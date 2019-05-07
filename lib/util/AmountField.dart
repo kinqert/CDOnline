@@ -31,7 +31,7 @@ class _AmountFieldState extends State<AmountField> {
       cursorWidth: 0,
       textAlign: TextAlign.center,
       textInputAction: TextInputAction.done,
-      keyboardType: TextInputType.numberWithOptions(decimal: true),
+      keyboardType: TextInputType.number,
       controller: controller,);
   }
 

@@ -1,4 +1,6 @@
+import 'package:cdonline/contacts/Contact.dart';
 import 'package:cdonline/database/Table.dart';
+import 'package:cdonline/operations/Credit.dart';
 import 'package:cdonline/operations/Operation.dart';
 import 'package:cdonline/operations/Transaction.dart';
 
@@ -53,6 +55,20 @@ class TransactionTable extends Table<TransactionData> {
         description: row[columnDescription]);
   }
 
+  Future<List<Transaction>> allTransactionFromContact(Contact contact) async {
+    List<Transaction> transactions = await allTransactions();
+    transactions.retainWhere(
+        (transaction) => transaction.data.contactId == contact.data.id);
+    return transactions;
+  }
+
+  Future<List<Transaction>> allTransactionFromCredit(Credit credit) async {
+    List<Transaction> transactions = await allTransactions();
+    transactions.retainWhere((transaction) =>
+        (transaction.data as TransactionData).creditId == credit.data.id);
+    return transactions;
+  }
+
   void insertTransaction(TransactionData data) async {
     insert(data, _createRowFromData);
   }
@@ -63,7 +79,7 @@ class TransactionTable extends Table<TransactionData> {
 
   Future<List<Transaction>> allTransactions() async {
     List<Transaction> transactions = new List<Transaction>();
-    
+
     for (var data in await allTransactionData()) {
       transactions.add(Transaction(data));
     }
@@ -79,5 +95,14 @@ class TransactionTable extends Table<TransactionData> {
   void deleteTransaction(TransactionData data) async {
     // Assuming that the number of rows is the id for the last row.
     deleteData(data.id);
+  }
+
+  void deleteAllTransactionFromContact(Contact contact) async {
+    List<Transaction> transactions = await allTransactions();
+    transactions.retainWhere((transaction) => transaction.data.contactId == contact.data.id);
+
+    for (var transaction in transactions) {
+      deleteTransaction(transaction.data);
+    }
   }
 }

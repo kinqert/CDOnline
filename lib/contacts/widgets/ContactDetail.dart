@@ -63,21 +63,22 @@ class _ContactDetailState extends State<ContactDetail> {
       padding: EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
-          _buildFormField(nameController, true),
-          _buildFormField(lastnameController, false),
-          _buildFormField(phoneController, false),
-          _buildFormField(addressController, false),
-          _buildFormField(noteController, false),
+          _buildFormField(nameController, true, "Name"),
+          _buildFormField(lastnameController, false, "Lastname"),
+          _buildFormField(phoneController, false, "Phone number"),
+          _buildFormField(addressController, false, "Address"),
+          _buildFormField(noteController, false,  "Note"),
         ],
       ),
     );
   }
 
-  Widget _buildFormField(TextEditingController controller, bool notNull) {
+  Widget _buildFormField(TextEditingController controller, bool notNull, String placeHolder) {
     return TextFormField(
       controller: controller,
+      decoration: InputDecoration(hintText: placeHolder),
       validator: (value) {
-        if (value.isEmpty) return 'Please add name';
+        if (value.isEmpty && notNull == true) return 'Please add name';
       },
       onEditingComplete: updateIfValidate,
     );

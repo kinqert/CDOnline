@@ -1,7 +1,6 @@
-import 'package:cdonline/operations/widgets/CreditTile.dart';
+import 'package:cdonline/operations/widgets/OperationCell.dart';
 import 'package:flutter/material.dart';
 
-import '../Credit.dart';
 import '../Operation.dart';
 
 class OperationList extends StatelessWidget {
@@ -22,10 +21,7 @@ class OperationList extends StatelessWidget {
   }
 
   Widget _buildItem(int index) {
-    if (operations[index] is Credit) {
-      return Container(
-          padding: EdgeInsets.all(10), child: CreditTile(operations[index]));
-    }
-    return null;
+    return Container(
+      padding: EdgeInsets.all(10), child: OperationCell(operations[index]));
   }
 }

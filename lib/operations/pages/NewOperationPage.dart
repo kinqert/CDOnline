@@ -1,9 +1,11 @@
-import 'package:cdonline/contacts/ContactData.dart';
+import 'package:cdonline/contacts/Contact.dart';
 import 'package:cdonline/contacts/widgets/ContactSlider.dart';
 import 'package:cdonline/database/ContactTable.dart';
 import 'package:cdonline/database/CreditTable.dart';
+import 'package:cdonline/database/TransactionTable.dart';
 import 'package:cdonline/operations/Operation.dart';
-import 'package:cdonline/operations/widgets/CreditDetail.dart';
+import 'package:cdonline/operations/Transaction.dart';
+import 'package:cdonline/operations/widgets/OperationDetail.dart';
 import 'package:flutter/material.dart';
 
 import '../Credit.dart';
@@ -17,7 +19,7 @@ class NewOperationPage extends StatefulWidget {
 }
 
 class _NewOperationPageState extends State<NewOperationPage> implements ContactSliderDelegate {
-  List<ContactData> selectedContacts = new List<ContactData>();
+  List<Contact> selectedContacts = new List<Contact>();
 
   bool contactValidate = false;
 
@@ -28,18 +30,18 @@ class _NewOperationPageState extends State<NewOperationPage> implements ContactS
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ContactTable.instance.allContactData(),
+      future: ContactTable.instance.allContact(),
       builder: (context, snapshot) {
         return Scaffold(
             appBar: AppBar(
                 title: Text('New operation'),
                 actions: <Widget>[_buildDoneIcon()]),
             body: Container(
-              padding: EdgeInsets.only(top: 20, bottom: 20),
+              padding: EdgeInsets.only(top: 5, bottom: 20),
               child: Column(
                 children: <Widget>[
                   _buildSliderFromSnapshot(context, snapshot),
-                  _buildDetailFromOperation()
+                  OperationDetail(operation)
                 ],
               ),
             ));
@@ -53,17 +55,12 @@ class _NewOperationPageState extends State<NewOperationPage> implements ContactS
   }
 
   Widget _buildSliderFromSnapshot(
-      BuildContext context, AsyncSnapshot<List<ContactData>> snapshot) {
+      BuildContext context, AsyncSnapshot<List<Contact>> snapshot) {
     if (snapshot.hasData) {
       return Container(
           height: 95, child: ContactSlider(snapshot.data, selectedContacts, this));
     }
     return Text("No contact founded");
-  }
-
-  Widget _buildDetailFromOperation() {
-    if (operation is Credit) return CreditDetail(operation);
-    return Text("This operation is not supported yet");
   }
 
   bool validate() {
@@ -74,8 +71,19 @@ class _NewOperationPageState extends State<NewOperationPage> implements ContactS
     operation.data.date = DateTime.now();
     if (operation is Credit) {
       for (var contact in selectedContacts) {
-        operation.data.contactId = contact.id;
+        operation.data.contactId = contact.data.id;
         CreditTable.instance.insertCredit(operation.data);
+      }
+    }
+
+    if (operation is Transaction) {
+      for (var contact in selectedContacts) {
+        operation.data.contactId = contact.data.id;
+        if (contact.creditExist()) {
+          (operation.data as TransactionData).creditId = contact.credit.data.id;
+          contact.credit.addTransaction(operation);
+        }
+        TransactionTable.instance.insertTransaction(operation.data);
       }
     }
 

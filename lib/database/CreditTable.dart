@@ -1,7 +1,9 @@
 import 'package:cdonline/contacts/Contact.dart';
 import 'package:cdonline/database/Table.dart';
+import 'package:cdonline/database/TransactionTable.dart';
 import 'package:cdonline/operations/Credit.dart';
 import 'package:cdonline/operations/Operation.dart';
+import 'package:cdonline/operations/Transaction.dart';
 
 class CreditTable extends Table<OperationData> {
   static final table = 'Credits';
@@ -74,21 +76,31 @@ class CreditTable extends Table<OperationData> {
 
   Future<List<Credit>> allCredit() async {
     List<Credit> credits = new List<Credit>();
-    
+
     for (var data in await allOperationData()) {
-      credits.add(Credit(data));
+      var credit = Credit(data);
+      for (var transaction in await TransactionTable.instance
+          .allTransactionFromCredit(credit)) credit.addTransaction(transaction);
+      credits.add(credit);
     }
 
     return credits;
   }
 
   void updateCredit(OperationData data) async {
-    // row to update
     updateData(data, _createRowFromData);
   }
 
   void deleteCredit(OperationData data) async {
-    // Assuming that the number of rows is the id for the last row.
     deleteData(data.id);
+  }
+
+  void deleteAllCreditFromContact(Contact contact) async {
+    List<Credit> credits = await allCredit();
+    credits.retainWhere((credit) => credit.data.contactId == contact.data.id);
+
+    for (var credit in credits) {
+      deleteCredit(credit.data);
+    }
   }
 }

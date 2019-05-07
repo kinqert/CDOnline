@@ -9,7 +9,7 @@ class Contact implements CreditDelegate {
 
   Contact(this.data);
 
-  bool debtExist() {
+  bool creditExist() {
     return credit != null;
   }
 
