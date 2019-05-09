@@ -3,27 +3,21 @@ import 'package:cdonline/util/CDColors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
-class AmountField extends StatefulWidget {
+class AmountField extends StatelessWidget {
   final Operation operation;
-  AmountField(this.operation, {Key key}) : super(key: key);
+  final controller = new MoneyMaskedTextController(rightSymbol: '€');
+  final Function onAmountChange;
 
-  _AmountFieldState createState() => _AmountFieldState(operation);
-}
-
-class _AmountFieldState extends State<AmountField> {
-  MoneyMaskedTextController controller;
-  Operation operation;
-
-  _AmountFieldState(this.operation) {
-    controller = new MoneyMaskedTextController(initialValue: operation.data.amount, rightSymbol: '€');
-    controller.addListener(_amountSetted);
-  }
+  AmountField(this.operation, {this.onAmountChange});
 
   @override
   Widget build(BuildContext context) {
+    controller.updateValue(0.0);
+    controller.addListener(_amountSetted);
+
     var border = UnderlineInputBorder(borderSide: BorderSide(color: CDColors.getOperationColor(operation)));
 
-    return TextField(
+    return Container(child: TextField(
       decoration: InputDecoration(
         enabledBorder: border,
         focusedBorder: border,
@@ -31,13 +25,11 @@ class _AmountFieldState extends State<AmountField> {
       cursorWidth: 0,
       textAlign: TextAlign.center,
       textInputAction: TextInputAction.done,
-      keyboardType: TextInputType.number,
-      controller: controller,);
+      keyboardType: TextInputType.numberWithOptions(),
+      controller: controller,),);
   }
 
   void _amountSetted() {
-    setState(() {
-      operation.data.amount = controller.numberValue;
-    });
+    onAmountChange(controller.numberValue);
   }
 }

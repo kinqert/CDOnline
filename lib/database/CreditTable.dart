@@ -3,7 +3,6 @@ import 'package:cdonline/database/Table.dart';
 import 'package:cdonline/database/TransactionTable.dart';
 import 'package:cdonline/operations/Credit.dart';
 import 'package:cdonline/operations/Operation.dart';
-import 'package:cdonline/operations/Transaction.dart';
 
 class CreditTable extends Table<OperationData> {
   static final table = 'Credits';

@@ -22,6 +22,7 @@ class _NewOperationPageState extends State<NewOperationPage> implements ContactS
   List<Contact> selectedContacts = new List<Contact>();
 
   bool contactValidate = false;
+  bool operationValidated = false;
 
   Operation operation;
 
@@ -41,7 +42,7 @@ class _NewOperationPageState extends State<NewOperationPage> implements ContactS
               child: Column(
                 children: <Widget>[
                   _buildSliderFromSnapshot(context, snapshot),
-                  OperationDetail(operation)
+                  OperationDetail(operation, operationModified: _operationModified, )
                 ],
               ),
             ));
@@ -64,7 +65,13 @@ class _NewOperationPageState extends State<NewOperationPage> implements ContactS
   }
 
   bool validate() {
-    return contactValidate && operation.data.amount != 0.0;
+    return contactValidate && operationValidated;
+  }
+
+  void _operationModified() {
+    setState(() {
+      operationValidated = operation.data.amount != 0.0;
+    });
   }
 
   void _operationDone() {

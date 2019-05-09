@@ -9,8 +9,9 @@ import '../Credit.dart';
 
 class OperationDetail extends StatefulWidget {
   final Operation operation;
+  final Function operationModified;
 
-  OperationDetail(this.operation, {Key key}) : super(key: key);
+  OperationDetail(this.operation, {Key key, this.operationModified}) : super(key: key);
 
   _OperationDetailState createState() => _OperationDetailState(operation);
 }
@@ -18,8 +19,9 @@ class OperationDetail extends StatefulWidget {
 class _OperationDetailState extends State<OperationDetail>
     implements CDSwitchDelegate {
   Operation operation;
+  Function operationModified;
 
-  _OperationDetailState(this.operation);
+  _OperationDetailState(this.operation, {this.operationModified});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class _OperationDetailState extends State<OperationDetail>
           child: Column(
             children: <Widget>[
               _buildTitle(),
-              AmountField(operation),
+              AmountField(operation, onAmountChange: _amountChanged,),
               DirectionSwitch(operation, this)
             ],
           ),
@@ -58,10 +60,18 @@ class _OperationDetailState extends State<OperationDetail>
     return operation.data.direction == OperationDirection.FromUserToContact;
   }
 
+  void _amountChanged(double amount) {
+    setState(() {
+      operation.data.amount = amount;
+      operationModified();
+    });
+  }
+
   @override
   void switchChanged(OperationDirection direction) {
     setState(() {
       operation.data.direction = direction;
+      operationModified();
     });
   }
 }

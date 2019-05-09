@@ -93,6 +93,7 @@ class _ContactDetailState extends State<ContactDetail> {
   }
 
   void updateIfValidate() {
+    FocusScope.of(context).requestFocus(new FocusNode());
     if (_formKey.currentState.validate())
       setState(() {
         _setContactDataFromText();
