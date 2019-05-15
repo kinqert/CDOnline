@@ -23,9 +23,9 @@ class OperationCell extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "${CDUtil.getNameOperation(operation)}: ${operation.data.amount}",
+                  "${CDUtil.getNameOperationData(operation.data)}: ${operation.data.amount}",
                   style:
-                      TextStyle(color: CDColors.getOperationColor(operation)),
+                      TextStyle(color: CDColors.getOperationDataColor(operation.data)),
                 ),
                 Text("Date: ${operation.data.date}")
               ],

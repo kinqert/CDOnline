@@ -1,73 +1,34 @@
-import 'package:cdonline/operations/Credit.dart';
 import 'package:cdonline/operations/Operation.dart';
+import 'package:cdonline/util/CDColors.dart';
+import 'package:cdonline/util/CDUtil.dart';
 import 'package:flutter/material.dart';
-
-abstract class CDSwitchDelegate {
-  void switchChanged(OperationDirection direction);
-}
+import 'package:provider/provider.dart';
 
 class DirectionSwitch extends StatelessWidget {
-  final Operation operation;
-  final CDSwitchDelegate delegate;
-
-  const DirectionSwitch(this.operation, this.delegate);
-
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    return _buildSwitch(theme);
-  }
+    final OperationData data = Provider.of<OperationData>(context);
 
-  Widget _buildSwitch(ThemeData theme) {
-    if (operation is Credit)
-      return _builCreditSwitch(theme);
-    else
-      return _buildTransactionSwitch(theme);
-  }
-
-  Widget _buildTransactionSwitch(ThemeData theme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        Text('Given'),
+        Text(CDUtil.getDirectionNameForOperationData(
+            data, OperationDirection.FromUserToContact)),
         Switch(
-          activeColor: theme.hintColor,
-          inactiveTrackColor: Colors.red[800],
-          inactiveThumbColor: theme.errorColor,
-          value: _switchValue(),
-          onChanged: _directionChanged,
+          activeColor: CDColors.getActiveColorOperationData(data),
+          inactiveTrackColor: CDColors.getInactiveTrackColorOperationData(data),
+          inactiveThumbColor: CDColors.getInactiveColorOperationData(data),
+          value:
+              data.direction == OperationDirection.FromContactToUser,
+          onChanged: (value) {
+            data.direction = value
+                ? OperationDirection.FromContactToUser
+                : OperationDirection.FromUserToContact;
+          },
         ),
-        Text('Recived')
+        Text(CDUtil.getDirectionNameForOperationData(
+            data, OperationDirection.FromContactToUser))
       ],
     );
-  }
-
-  Widget _builCreditSwitch(ThemeData theme) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Text('Credit'),
-        Switch(
-          activeColor: theme.errorColor,
-          inactiveTrackColor: Colors.green[800],
-          inactiveThumbColor: theme.hintColor,
-          value: _switchValue(),
-          onChanged: _directionChanged,
-        ),
-        Text('Debt')
-      ],
-    );
-  }
-
-  bool _switchValue() {
-    return operation.data.direction == OperationDirection.FromContactToUser;
-  }
-
-  void _directionChanged(bool value) {
-    var direction =
-        operation.data.direction == OperationDirection.FromUserToContact
-            ? OperationDirection.FromContactToUser
-            : OperationDirection.FromUserToContact;
-    delegate?.switchChanged(direction);
   }
 }

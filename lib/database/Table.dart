@@ -45,16 +45,13 @@ abstract class Table<T> {
   }
 
   void insert(T data, Function createRowFromData) async {
-    // row to insert
     Map<String, dynamic> row = createRowFromData(data);
-    final id = await _insert(row);
-    print('inserted row id: $id');
+    await _insert(row);
   }
 
   Future<List<T>> allData(Function createDataFromRow) async {
     List<T> listData = new List<T>();
     final allRows = await _tryQueryAllRows();
-    print('query all rows:');
     allRows.forEach((row) {
       T data = createDataFromRow(row);
       listData.add(data);
@@ -63,15 +60,11 @@ abstract class Table<T> {
   }
 
   void updateData(T data, Function createRowFromData) async {
-    // row to update
     Map<String, dynamic> row = createRowFromData(data);
-    final rowsAffected = await _update(row);
-    print('updated $rowsAffected row(s)');
+    await _update(row);
   }
 
   void deleteData(int id) async {
-    // Assuming that the number of rows is the id for the last row.
-    final rowsDeleted = await _delete(id);
-    print('deleted $rowsDeleted row(s): row $id');
+    await _delete(id);
   }
 }

@@ -1,15 +1,26 @@
-import 'package:cdonline/operations/Credit.dart';
 import 'package:cdonline/operations/Operation.dart';
 import 'package:cdonline/operations/Transaction.dart';
 
 abstract class CDUtil {
-  static String getNameOperation(Operation operation) {
-    if (operation is Transaction)
+  static String getNameOperationData(OperationData data) {
+    if (data is TransactionData)
       return "Transaction";
     else {
-      if (operation.data.direction == OperationDirection.FromUserToContact) 
+      if (data.direction == OperationDirection.FromUserToContact) 
         return "Credit";
       return "Debt";
     }
+  }
+
+  static String getDirectionNameForOperationData(OperationData data, OperationDirection direction) {
+    if (data is OperationData) {
+      return direction == OperationDirection.FromUserToContact ?
+        "Credit" : "Debit";
+    } else if (data is TransactionData) {
+      return direction == OperationDirection.FromUserToContact ?
+        "Given" : "Recived";
+    }
+
+    return null;
   }
 }

@@ -88,12 +88,10 @@ class TransactionTable extends Table<TransactionData> {
   }
 
   void updateTransaction(TransactionData data) async {
-    // row to update
     updateData(data, _createRowFromData);
   }
 
   void deleteTransaction(TransactionData data) async {
-    // Assuming that the number of rows is the id for the last row.
     deleteData(data.id);
   }
 
