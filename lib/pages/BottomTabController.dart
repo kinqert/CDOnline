@@ -1,6 +1,6 @@
-import 'package:cdonline/contacts/pages/ContactListPage.dart';
-import 'package:cdonline/dashboards/pages/DashboardPage.dart';
-import 'package:cdonline/operations/pages/OperationPage.dart';
+import 'ContactListPage.dart';
+import 'DashboardPage.dart';
+import 'OperationPage.dart';
 import 'package:flutter/material.dart';
 
 class BottomTabController extends StatefulWidget {

@@ -1,10 +1,11 @@
-import 'package:cdonline/contacts/Contact.dart';
 import 'package:cdonline/database/Table.dart';
 import 'package:cdonline/database/TransactionTable.dart';
-import 'package:cdonline/operations/Credit.dart';
-import 'package:cdonline/operations/Operation.dart';
 
-class CreditTable extends Table<OperationData> {
+import 'package:cdonline/models/Contact.dart';
+import 'package:cdonline/models/Operation.dart';
+import 'package:cdonline/models/Credit.dart';
+
+class CreditTable extends Table<Credit> {
   static final table = 'Credits';
   static final id = 'id';
   static final columnContact = 'contact';
@@ -30,19 +31,19 @@ class CreditTable extends Table<OperationData> {
           ''';
   }
 
-  Map<String, dynamic> _createRowFromData(OperationData data) {
+  Map<String, dynamic> _createRowFromData(Credit credit) {
     return {
-      columnId: data.id,
-      columnContact: data.contactId,
-      columnAmount: data.amount,
-      columnDate: data.date.toUtc().toString(),
-      columnDirection: data.direction.index,
-      columnDescription: data.description,
+      columnId: credit.id,
+      columnContact: credit.contactId,
+      columnAmount: credit.amount,
+      columnDate: credit.date.toUtc().toString(),
+      columnDirection: credit.direction.index,
+      columnDescription: credit.description,
     };
   }
 
-  OperationData _createDataFromRow(Map<String, dynamic> row) {
-    return OperationData(
+  Credit _createDataFromRow(Map<String, dynamic> row) {
+    return Credit(
         id: row[columnId],
         contactId: row[columnContact],
         amount: row[columnAmount],
@@ -54,30 +55,25 @@ class CreditTable extends Table<OperationData> {
   Future<Credit> getContactCredit(Contact contact) async {
     // TODO: MUST OPTIMIZED!
     List<Credit> credits = await allCredit();
-    credits.retainWhere((credit) => credit.data.contactId == contact.data.id);
+    credits.retainWhere((credit) => credit.contactId == contact.id);
     return credits.length > 0 ? credits.last : null;
   }
 
   Future<List<Credit>> getAllContactCredit(Contact contact) async {
     // TODO: MUST OPTIMIZED!
     List<Credit> credits = await allCredit();
-    credits.retainWhere((credit) => credit.data.contactId == contact.data.id);
+    credits.retainWhere((credit) => credit.contactId == contact.id);
     return credits;
   }
 
-  void insertCredit(OperationData data) async {
-    insert(data, _createRowFromData);
-  }
-
-  Future<List<OperationData>> allOperationData() async {
-    return allData(_createDataFromRow);
+  void insertCredit(Credit credit) async {
+    insert(credit, _createRowFromData);
   }
 
   Future<List<Credit>> allCredit() async {
     List<Credit> credits = new List<Credit>();
 
-    for (var data in await allOperationData()) {
-      var credit = Credit(data);
+    for (Credit credit in await allData(_createDataFromRow)) {
       for (var transaction in await TransactionTable.instance
           .allTransactionFromCredit(credit)) credit.addTransaction(transaction);
       credits.add(credit);
@@ -86,20 +82,20 @@ class CreditTable extends Table<OperationData> {
     return credits;
   }
 
-  void updateCredit(OperationData data) async {
-    updateData(data, _createRowFromData);
+  void updateCredit(Credit credit) async {
+    updateData(credit, _createRowFromData);
   }
 
-  void deleteCredit(OperationData data) async {
-    deleteData(data.id);
+  void deleteCredit(Credit credit) async {
+    deleteData(credit.id);
   }
 
   void deleteAllCreditFromContact(Contact contact) async {
     List<Credit> credits = await allCredit();
-    credits.retainWhere((credit) => credit.data.contactId == contact.data.id);
+    credits.retainWhere((credit) => credit.contactId == contact.id);
 
     for (var credit in credits) {
-      deleteCredit(credit.data);
+      deleteCredit(credit);
     }
   }
 }

@@ -1,10 +1,10 @@
-import 'package:cdonline/contacts/Contact.dart';
-import 'package:cdonline/contacts/ContactData.dart';
 import 'package:cdonline/database/CreditTable.dart';
 import 'package:cdonline/database/Table.dart';
 import 'package:cdonline/database/TransactionTable.dart';
 
-class ContactTable extends Table<ContactData> {
+import 'package:cdonline/models/Contact.dart';
+
+class ContactTable extends Table<Contact> {
   static final table = 'Contacts';
   static final id = 'id';
   static final columnName = 'name';
@@ -30,19 +30,19 @@ class ContactTable extends Table<ContactData> {
           ''';
   }
 
-  Map<String, dynamic> _createRowFromData(ContactData data) {
+  Map<String, dynamic> _createRowFromData(Contact contact) {
     return {
-      columnId: data.id,
-      columnName: data.name,
-      columnLastname: data.lastName,
-      columnPhone: data.phone,
-      columnAddress: data.address,
-      columnNote: data.note,
+      columnId: contact.id,
+      columnName: contact.name,
+      columnLastname: contact.lastName,
+      columnPhone: contact.phone,
+      columnAddress: contact.address,
+      columnNote: contact.note,
     };
   }
 
-  ContactData _createDataFromRow(Map<String, dynamic> row) {
-    return ContactData(
+  Contact _createDataFromRow(Map<String, dynamic> row) {
+    return Contact(
         id: row[columnId],
         name: row[columnName],
         lastName: row[columnLastname],
@@ -51,19 +51,14 @@ class ContactTable extends Table<ContactData> {
         note: row[columnNote]);
   }
 
-  void insertContact(ContactData data) async {
-    insert(data, _createRowFromData);
-  }
-
-  Future<List<ContactData>> allContactData() async {
-    return allData(_createDataFromRow);
+  void insertContact(Contact contact) async {
+    insert(contact, _createRowFromData);
   }
 
   Future<List<Contact>> allContact() async {
     List<Contact> contacts = new List<Contact>();
 
-    for (ContactData data in await allContactData()) {
-      var contact = Contact(data);
+    for (Contact contact in await allData(_createDataFromRow)) {
       contact.credit = await CreditTable.instance.getContactCredit(contact);
       contacts.add(contact);
     }
@@ -71,13 +66,13 @@ class ContactTable extends Table<ContactData> {
     return contacts;
   }
 
-  void updateContact(ContactData data) async {
-    updateData(data, _createRowFromData);
+  void updateContact(Contact contact) async {
+    updateData(contact, _createRowFromData);
   }
 
   void deleteContact(Contact contact) async {
     TransactionTable.instance.deleteAllTransactionFromContact(contact);
     CreditTable.instance.deleteAllCreditFromContact(contact);
-    deleteData(contact.data.id);
+    deleteData(contact.id);
   }
 }

@@ -1,29 +1,31 @@
-import 'package:cdonline/operations/Operation.dart';
 import 'package:flutter/material.dart';
+
+import 'package:cdonline/models/Operation.dart';
+import 'package:cdonline/models/Credit.dart';
 
 class CDColors {
   static Color red = Color(0xffff3131);
   static Color green = Color(0xff5fff89);
 
-  static Color getOperationDataColor(OperationData data) {
-    var fromUToC = data.direction == OperationDirection.FromUserToContact;
+  static Color getOperationColor(Operation operation) {
+    var fromUToC = operation.direction == OperationDirection.FromUserToContact;
 
-    if(data is OperationData) {
+    if(operation is Credit) {
       return fromUToC ? green : red;
     }
     
     return fromUToC ? red : green;
   }
 
-  static Color getActiveColorOperationData(OperationData data) {
-    return data is OperationData ? red : green;
+  static Color getActiveColorOperation(Operation operation) {
+    return operation is Credit ? red : green;
   }
 
-  static Color getInactiveColorOperationData(OperationData data) {
-    return data is OperationData ? green : red;
+  static Color getInactiveColorOperation(Operation operation) {
+    return operation is Credit ? green : red;
   }
 
-  static Color getInactiveTrackColorOperationData(OperationData data) {
-    return data is OperationData ? Colors.green[800] : Colors.red[800];
+  static Color getInactiveTrackColorOperation(Operation operation) {
+    return operation is Credit ? Colors.green[800] : Colors.red[800];
   }
 }

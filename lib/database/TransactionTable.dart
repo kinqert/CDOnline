@@ -1,10 +1,11 @@
-import 'package:cdonline/contacts/Contact.dart';
 import 'package:cdonline/database/Table.dart';
-import 'package:cdonline/operations/Credit.dart';
-import 'package:cdonline/operations/Operation.dart';
-import 'package:cdonline/operations/Transaction.dart';
 
-class TransactionTable extends Table<TransactionData> {
+import 'package:cdonline/models/Contact.dart';
+import 'package:cdonline/models/Credit.dart';
+import 'package:cdonline/models/Operation.dart';
+import 'package:cdonline/models/Transaction.dart';
+
+class TransactionTable extends Table<Transaction> {
   static final table = 'Transactions';
   static final id = 'id';
   static final columnContact = 'contact';
@@ -32,20 +33,20 @@ class TransactionTable extends Table<TransactionData> {
           ''';
   }
 
-  Map<String, dynamic> _createRowFromData(TransactionData data) {
+  Map<String, dynamic> _createRowFromData(Transaction transaction) {
     return {
-      columnId: data.id,
-      columnContact: data.contactId,
-      columnCredit: data.creditId,
-      columnAmount: data.amount,
-      columnDate: data.date.toUtc().toString(),
-      columnDirection: data.direction.index,
-      columnDescription: data.description,
+      columnId: transaction.id,
+      columnContact: transaction.contactId,
+      columnCredit: transaction.creditId,
+      columnAmount: transaction.amount,
+      columnDate: transaction.date.toUtc().toString(),
+      columnDirection: transaction.direction.index,
+      columnDescription: transaction.description,
     };
   }
 
-  TransactionData _createDataFromRow(Map<String, dynamic> row) {
-    return TransactionData(
+  Transaction _createDataFromRow(Map<String, dynamic> row) {
+    return Transaction(
         id: row[columnId],
         contactId: row[columnContact],
         creditId: row[columnCredit],
@@ -57,50 +58,47 @@ class TransactionTable extends Table<TransactionData> {
 
   Future<List<Transaction>> allTransactionFromContact(Contact contact) async {
     List<Transaction> transactions = await allTransactions();
-    transactions.retainWhere(
-        (transaction) => transaction.data.contactId == contact.data.id);
+    transactions
+        .retainWhere((transaction) => transaction.contactId == contact.id);
     return transactions;
   }
 
   Future<List<Transaction>> allTransactionFromCredit(Credit credit) async {
     List<Transaction> transactions = await allTransactions();
-    transactions.retainWhere((transaction) =>
-        (transaction.data as TransactionData).creditId == credit.data.id);
+    transactions
+        .retainWhere((transaction) => transaction.creditId == credit.id);
     return transactions;
   }
 
-  void insertTransaction(TransactionData data) async {
+  void insertTransaction(Transaction data) async {
     insert(data, _createRowFromData);
-  }
-
-  Future<List<TransactionData>> allTransactionData() async {
-    return allData(_createDataFromRow);
   }
 
   Future<List<Transaction>> allTransactions() async {
     List<Transaction> transactions = new List<Transaction>();
 
-    for (var data in await allTransactionData()) {
-      transactions.add(Transaction(data));
+    for (Transaction transaction in await allData(_createDataFromRow)) {
+      transactions.add(transaction);
     }
 
     return transactions;
   }
 
-  void updateTransaction(TransactionData data) async {
+  void updateTransaction(Transaction data) async {
     updateData(data, _createRowFromData);
   }
 
-  void deleteTransaction(TransactionData data) async {
+  void deleteTransaction(Transaction data) async {
     deleteData(data.id);
   }
 
   void deleteAllTransactionFromContact(Contact contact) async {
     List<Transaction> transactions = await allTransactions();
-    transactions.retainWhere((transaction) => transaction.data.contactId == contact.data.id);
+    transactions
+        .retainWhere((transaction) => transaction.contactId == contact.id);
 
     for (var transaction in transactions) {
-      deleteTransaction(transaction.data);
+      deleteTransaction(transaction);
     }
   }
 }
