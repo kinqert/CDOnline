@@ -42,13 +42,14 @@ class ContactTable extends Table<Contact> {
   }
 
   Contact _createDataFromRow(Map<String, dynamic> row) {
-    return Contact(
-        id: row[columnId],
-        name: row[columnName],
-        lastName: row[columnLastname],
-        phone: row[columnPhone],
-        address: row[columnAddress],
-        note: row[columnNote]);
+    Contact contact = Contact();
+    contact.id = row[columnId];
+    contact.name = row[columnName];
+    contact.lastName = row[columnLastname];
+    contact.phone = row[columnPhone];
+    contact.address = row[columnAddress];
+    contact.note = row[columnNote];
+    return contact;
   }
 
   void insertContact(Contact contact) async {

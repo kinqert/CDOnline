@@ -43,13 +43,14 @@ class CreditTable extends Table<Credit> {
   }
 
   Credit _createDataFromRow(Map<String, dynamic> row) {
-    return Credit(
-        id: row[columnId],
-        contactId: row[columnContact],
-        amount: row[columnAmount],
-        date: DateTime.parse(row[columnDate]),
-        direction: OperationDirection.values[row[columnDirection]],
-        description: row[columnDescription]);
+    Credit credit = Credit();
+    credit.id = row[columnId];
+    credit.contactId = row[columnContact];
+    credit.amount = row[columnAmount];
+    credit.date = DateTime.parse(row[columnDate]);
+    credit.direction = OperationDirection.values[row[columnDirection]];
+    credit.description = row[columnDescription];
+    return credit;
   }
 
   Future<Credit> getContactCredit(Contact contact) async {

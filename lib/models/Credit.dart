@@ -12,26 +12,9 @@ class Credit extends Operation {
 
   List<Transaction> transactions = new List<Transaction>();
 
-  Credit({
-    int id,
-    int contactId,
-    int creditId,
-    double amount,
-    DateTime date,
-    String description,
-    OperationDirection direction,
-  }) : super(
-            id: id,
-            contactId: contactId,
-            amount: amount,
-            date: date,
-            description: description);
-
-  Credit.newCredit() {
-    amount = 0.0;
-    direction = OperationDirection.FromUserToContact;
-    description = '';
-  }
+  Credit();
+  
+  Credit.newCredit() : super.newAmount();
 
   // TODO: puo essere ottimizzata
   void addTransaction(Transaction transaction) {
@@ -42,8 +25,10 @@ class Credit extends Operation {
     notifyIfClosed();
   }
 
-  void removeTransaction(Transaction transaction) =>
-      transactions.remove(transaction);
+  void removeTransaction(Transaction transaction) {
+    transactions.remove(transaction);
+    notifyListeners();
+  }
 
   Transaction getTransactionAtIndex(int index) => transactions.elementAt(index);
 
@@ -64,6 +49,10 @@ class Credit extends Operation {
   bool isDebtPayed() => getAmountLeft() <= 0;
 
   void notifyIfClosed() {
-    if (isDebtPayed()) delegate?.creditExtinguished();
+    if (isDebtPayed()) {
+      delegate?.creditExtinguished();
+      delegate = null;
+      notifyListeners();
+    }
   }
 }

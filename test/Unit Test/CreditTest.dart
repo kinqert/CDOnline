@@ -1,7 +1,7 @@
-import 'package:cdonline/operations/Credit.dart';
-import 'package:cdonline/operations/Operation.dart';
-import 'package:cdonline/operations/Transaction.dart';
-import 'package:cdonline/operations/exceptions/DebtExceededException.dart';
+import 'package:cdonline/models/Credit.dart';
+import 'package:cdonline/models/Operation.dart';
+import 'package:cdonline/models/Transaction.dart';
+import 'package:cdonline/exceptions/DebtExceededException.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -10,40 +10,40 @@ void main() {
   final initialDescription = "Description";
 
   Credit credit;
+  Transaction t1, t2;
 
   setUp(() {
-    credit = new Credit(
-      OperationData(
-          amount: initialAmount,
-          direction: initialDirection,
-          description: initialDescription),
-    );
+    credit = new Credit();
+    credit.amount = initialAmount;
+    credit.direction = initialDirection;
+    credit.description = initialDescription;
+
+    t1 = new Transaction();
+    t1.amount = 5.0;
+    t1.direction = OperationDirection.FromContactToUser;
+
+    t2 = new Transaction();
+    t2.amount = 15.0;
+    t2.direction = OperationDirection.FromContactToUser;
   });
 
   test("Credit init", () {
-    expect(credit.data.amount, initialAmount);
-    expect(credit.data.direction, initialDirection);
-    expect(credit.data.description, initialDescription);
+    expect(credit.amount, initialAmount);
+    expect(credit.direction, initialDirection);
+    expect(credit.description, initialDescription);
   });
 
   test("Add transaction", () {
-    Transaction t = new Transaction(TransactionData(
-        amount: 5.0, direction: OperationDirection.FromContactToUser));
-    
-    credit.addTransaction(t);
+    credit.addTransaction(t1);
 
     expect(credit.transactions.length, 1);
   });
 
   test("Throw DebrExceedException", () {
-    Transaction t1 = new Transaction(TransactionData(
-        amount: 15.0, direction: OperationDirection.FromContactToUser));
-    Transaction t2 = new Transaction(TransactionData(
-        amount: 5.0, direction: OperationDirection.FromContactToUser));
     bool exceptionThrowed = false;
-    try{
-      credit.addTransaction(t1);
+    try {
       credit.addTransaction(t2);
+      credit.addTransaction(t1);
     } on DebtExceededException {
       exceptionThrowed = true;
     }

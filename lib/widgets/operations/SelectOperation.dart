@@ -31,9 +31,9 @@ class SelectOperation extends StatelessWidget {
   }
 
   void _onTap(BuildContext context, int index) {
-    var page = Provider<Operation>(
+    var page = ChangeNotifierProvider<Operation>(
       builder: (context) => index == 0
-          ? Transaction.newAmount()
+          ? Transaction.newTransaction()
           : Credit.newCredit(),
       child: NewOperationPage(),
     );

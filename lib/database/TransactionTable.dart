@@ -46,14 +46,15 @@ class TransactionTable extends Table<Transaction> {
   }
 
   Transaction _createDataFromRow(Map<String, dynamic> row) {
-    return Transaction(
-        id: row[columnId],
-        contactId: row[columnContact],
-        creditId: row[columnCredit],
-        amount: row[columnAmount],
-        date: DateTime.parse(row[columnDate]),
-        direction: OperationDirection.values[row[columnDirection]],
-        description: row[columnDescription]);
+    Transaction transaction = Transaction();
+    transaction.id = row[columnId];
+    transaction.contactId = row[columnContact];
+    transaction.creditId = row[columnCredit];
+    transaction.amount = row[columnAmount];
+    transaction.date = DateTime.parse(row[columnDate]);
+    transaction.direction = OperationDirection.values[row[columnDirection]];
+    transaction.description = row[columnDescription];
+    return transaction;
   }
 
   Future<List<Transaction>> allTransactionFromContact(Contact contact) async {

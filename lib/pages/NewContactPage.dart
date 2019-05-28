@@ -10,7 +10,7 @@ class NewContactPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider<Contact>(
+    return ChangeNotifierProvider<Contact>(
         builder: (BuildContext context) => contact,
         child: Scaffold(
           appBar: AppBar(
